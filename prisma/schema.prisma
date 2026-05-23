@@ -1,0 +1,295 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum RoleUtilisateur {
+  admin
+  caissier
+
+  @@map("role_utilisateur")
+}
+
+enum StatutMedicament {
+  actif
+  inactif
+  discontinue
+
+  @@map("statut_medicament")
+}
+
+enum StatutLot {
+  disponible
+  epuise
+  expire
+  retire
+
+  @@map("statut_lot")
+}
+
+enum ModePaiement {
+  especes
+  carte_bancaire
+  mobile_money   @map("mobile money")
+  virement
+
+  @@map("mode_paiement")
+}
+
+enum StatutVente {
+  complete
+  annulee
+  remboursee
+
+  @@map("statut_vente")
+}
+
+enum StatutCommande {
+  brouillon
+  envoyee
+  recue_partielle @map("recue_partielle")
+  recue_complete  @map("recue_complete")
+  annulee
+
+  @@map("statut_commande")
+}
+
+enum TypeMouvement {
+  entree
+  sortie
+  ajustement
+  retour
+  perte
+
+  @@map("type_mouvement")
+}
+
+// ─── Models ──────────────────────────────────────────────────────────────────
+
+model Pharmacie {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nom       String   @db.VarChar(200)
+  adresse   String?
+  telephone String?  @db.VarChar(20)
+  email     String?  @db.VarChar(255)
+  licence   String?  @db.VarChar(100)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  utilisateurs         Utilisateur[]
+  ventes               Vente[]
+  commandesFournisseur CommandeFournisseur[]
+  historiquesStock     HistoriqueStock[]
+
+  @@map("pharmacie")
+}
+
+model Utilisateur {
+  id               String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  pharmacieId      String          @map("pharmacie_id") @db.Uuid
+  nom              String          @db.VarChar(100)
+  prenom           String          @db.VarChar(100)
+  email            String          @unique @db.VarChar(255)
+  motDePasseHash   String          @map("mot_de_passe_hash") @db.VarChar(255)
+  role             RoleUtilisateur
+  actif            Boolean         @default(true)
+  dernierConnexion DateTime?       @map("dernier_connexion") @db.Timestamptz
+  createdAt        DateTime        @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime        @updatedAt @map("updated_at") @db.Timestamptz
+
+  pharmacie            Pharmacie             @relation(fields: [pharmacieId], references: [id])
+  ventes               Vente[]
+  commandesFournisseur CommandeFournisseur[]
+  historiquesStock     HistoriqueStock[]
+  sessionsToken        SessionToken[]
+
+  @@map("utilisateur")
+}
+
+model Categorie {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nom         String   @unique @db.VarChar(100)
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  medicaments Medicament[]
+
+  @@map("categorie")
+}
+
+model Fournisseur {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nom       String   @db.VarChar(200)
+  contact   String?  @db.VarChar(100)
+  telephone String?  @db.VarChar(20)
+  email     String?  @db.VarChar(255)
+  adresse   String?
+  actif     Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  medicaments          Medicament[]
+  commandesFournisseur CommandeFournisseur[]
+
+  @@map("fournisseur")
+}
+
+model Medicament {
+  id                  String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  categorieId         String?          @map("categorie_id") @db.Uuid
+  fournisseurId       String?          @map("fournisseur_id") @db.Uuid
+  denomination        String           @db.VarChar(300)
+  dci                 String?          @db.VarChar(200)
+  forme               String?          @db.VarChar(50)
+  dosage              String?          @db.VarChar(50)
+  conditionnement     String?          @db.VarChar(100)
+  codeBarres          String?          @unique @map("code_barres") @db.VarChar(50)
+  prixAchat           Decimal          @map("prix_achat") @db.Decimal(10, 2)
+  prixVente           Decimal          @map("prix_vente") @db.Decimal(10, 2)
+  stockMinimum        Int              @default(0) @map("stock_minimum")
+  stockActuel         Int              @default(0) @map("stock_actuel")
+  prescriptionRequise Boolean          @default(false) @map("prescription_requise")
+  statut              StatutMedicament @default(actif)
+  createdAt           DateTime         @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt           DateTime         @updatedAt @map("updated_at") @db.Timestamptz
+
+  categorie        Categorie?       @relation(fields: [categorieId], references: [id])
+  fournisseur      Fournisseur?     @relation(fields: [fournisseurId], references: [id])
+  lots             Lot[]
+  lignesVente      LigneVente[]
+  lignesCommande   LigneCommande[]
+  historiquesStock HistoriqueStock[]
+
+  @@map("medicament")
+}
+
+model Lot {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  medicamentId     String    @map("medicament_id") @db.Uuid
+  numeroLot        String    @map("numero_lot") @db.VarChar(100)
+  dateExpiration   DateTime  @map("date_expiration") @db.Date
+  quantite         Int
+  quantiteInitiale Int       @map("quantite_initiale")
+  statut           StatutLot @default(disponible)
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  medicament  Medicament   @relation(fields: [medicamentId], references: [id])
+  lignesVente LigneVente[]
+
+  @@map("lot")
+}
+
+model Vente {
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  pharmacieId   String      @map("pharmacie_id") @db.Uuid
+  utilisateurId String      @map("utilisateur_id") @db.Uuid
+  numeroVente   String      @unique @map("numero_vente") @db.VarChar(50)
+  modePaiement  ModePaiement @map("mode_paiement")
+  montantTotal  Decimal     @map("montant_total") @db.Decimal(12, 2)
+  montantPaye   Decimal     @map("montant_paye") @db.Decimal(12, 2)
+  monnaie       Decimal     @default(0) @db.Decimal(12, 2)
+  statut        StatutVente @default(complete)
+  notes         String?
+  createdAt     DateTime    @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime    @updatedAt @map("updated_at") @db.Timestamptz
+
+  pharmacie   Pharmacie    @relation(fields: [pharmacieId], references: [id])
+  utilisateur Utilisateur  @relation(fields: [utilisateurId], references: [id])
+  lignesVente LigneVente[]
+
+  @@map("vente")
+}
+
+model LigneVente {
+  id            String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  venteId       String  @map("vente_id") @db.Uuid
+  medicamentId  String  @map("medicament_id") @db.Uuid
+  lotId         String? @map("lot_id") @db.Uuid
+  quantite      Int
+  prixUnitaire  Decimal @map("prix_unitaire") @db.Decimal(10, 2)
+  tauxRemise    Decimal @default(0) @map("taux_remise") @db.Decimal(5, 2)
+  montantRemise Decimal @default(0) @map("montant_remise") @db.Decimal(10, 2)
+  sousTotal     Decimal @default(dbgenerated("0")) @map("sous_total") @db.Decimal(12, 2)
+
+  vente      Vente      @relation(fields: [venteId], references: [id])
+  medicament Medicament @relation(fields: [medicamentId], references: [id])
+  lot        Lot?       @relation(fields: [lotId], references: [id])
+
+  @@map("ligne_vente")
+}
+
+model CommandeFournisseur {
+  id                   String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  pharmacieId          String         @map("pharmacie_id") @db.Uuid
+  fournisseurId        String         @map("fournisseur_id") @db.Uuid
+  utilisateurId        String         @map("utilisateur_id") @db.Uuid
+  numeroCommande       String         @unique @map("numero_commande") @db.VarChar(50)
+  dateCommande         DateTime       @default(now()) @map("date_commande") @db.Timestamptz
+  dateLivraisonPrevue  DateTime?      @map("date_livraison_prevue") @db.Date
+  statut               StatutCommande @default(brouillon)
+  montantTotal         Decimal        @default(0) @map("montant_total") @db.Decimal(12, 2)
+  notes                String?
+  createdAt            DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt            DateTime       @updatedAt @map("updated_at") @db.Timestamptz
+
+  pharmacie      Pharmacie       @relation(fields: [pharmacieId], references: [id])
+  fournisseur    Fournisseur     @relation(fields: [fournisseurId], references: [id])
+  utilisateur    Utilisateur     @relation(fields: [utilisateurId], references: [id])
+  lignesCommande LigneCommande[]
+
+  @@map("commande_fournisseur")
+}
+
+model LigneCommande {
+  id                String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  commandeId        String  @map("commande_id") @db.Uuid
+  medicamentId      String  @map("medicament_id") @db.Uuid
+  quantiteCommandee Int     @map("quantite_commandee")
+  quantiteRecue     Int     @default(0) @map("quantite_recue")
+  prixUnitaire      Decimal @map("prix_unitaire") @db.Decimal(10, 2)
+  sousTotal         Decimal @default(dbgenerated("0")) @map("sous_total") @db.Decimal(12, 2)
+
+  commande   CommandeFournisseur @relation(fields: [commandeId], references: [id])
+  medicament Medicament          @relation(fields: [medicamentId], references: [id])
+
+  @@map("ligne_commande")
+}
+
+model HistoriqueStock {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  pharmacieId   String        @map("pharmacie_id") @db.Uuid
+  medicamentId  String        @map("medicament_id") @db.Uuid
+  utilisateurId String?       @map("utilisateur_id") @db.Uuid
+  typeMouvement TypeMouvement @map("type_mouvement")
+  quantite      Int
+  stockAvant    Int           @map("stock_avant")
+  stockApres    Int           @map("stock_apres")
+  referenceId   String?       @map("reference_id") @db.Uuid
+  referenceType String?       @map("reference_type") @db.VarChar(50)
+  notes         String?
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz
+
+  pharmacie   Pharmacie    @relation(fields: [pharmacieId], references: [id])
+  medicament  Medicament   @relation(fields: [medicamentId], references: [id])
+  utilisateur Utilisateur? @relation(fields: [utilisateurId], references: [id])
+
+  @@map("historique_stock")
+}
+
+model SessionToken {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  utilisateurId String   @map("utilisateur_id") @db.Uuid
+  token         String   @unique @db.VarChar(500)
+  expiresAt     DateTime @map("expires_at") @db.Timestamptz
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  utilisateur Utilisateur @relation(fields: [utilisateurId], references: [id])
+
+  @@map("session_token")
+}
