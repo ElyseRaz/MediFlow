@@ -33,6 +33,7 @@ export async function createCommande(data: CommandeInput) {
       fournisseurId: data.fournisseurId,
       utilisateurId: data.utilisateurId,
       numeroCommande,
+      statut: "envoyee",
       dateLivraisonPrevue: data.dateLivraisonPrevue ? new Date(data.dateLivraisonPrevue) : null,
       notes: data.notes || null,
       montantTotal,

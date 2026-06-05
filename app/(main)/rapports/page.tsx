@@ -157,9 +157,9 @@ function TabVentes() {
           {/* KPIs */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <KpiCard label="Chiffre d'affaires" value={fmt(data.ca_total)} color="text-[#0F6E56]" />
-            <KpiCard label="Marge brute" value={fmt(data.marge_brute)} sub={`${data.ca_total > 0 ? Math.round((data.marge_brute / data.ca_total) * 100) : 0}% du CA`} color="text-[#5DCAA5]" />
+            <KpiCard label="Bénéfice brut" value={fmt(data.marge_brute)} sub={`${data.ca_total > 0 ? Math.round((data.marge_brute / data.ca_total) * 100) : 0}% du total`} color="text-[#5DCAA5]" />
             <KpiCard label="Nombre de ventes" value={data.nb_ventes.toString()} color="text-[#1a1e2a]" />
-            <KpiCard label="Panier moyen" value={fmt(data.panier_moyen)} color="text-[#EF9F27]" />
+            <KpiCard label="Achat moyen par vente" value={fmt(data.panier_moyen)} color="text-[#EF9F27]" />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -378,7 +378,7 @@ function TabLots() {
 
   const badge = (l: Lot) => {
     if (l.expire) return <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-[#fdedec] text-[#E24B4A] text-[10px] font-semibold">Expiré</span>;
-    if (l.urgent) return <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-[#fef3e2] text-[#EF9F27] text-[10px] font-semibold">Critique ≤30j</span>;
+    if (l.urgent) return <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-[#fef3e2] text-[#EF9F27] text-[10px] font-semibold">Urgent ({"<"} 30j)</span>;
     return <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-[#eff6ff] text-[#0F6E56] text-[10px] font-semibold">Attention</span>;
   };
 
@@ -386,7 +386,7 @@ function TabLots() {
     <div className="space-y-5">
       <div className="bg-white rounded-[12px] border border-[#e0e5ed] p-4 flex flex-wrap gap-3 items-end shadow-[0px_2px_8px_0px_rgba(15,26,61,0.05)]">
         <div>
-          <label className="block text-[11px] font-medium text-[#737e94] mb-1">Horizon (jours)</label>
+          <label className="block text-[11px] font-medium text-[#737e94] mb-1">Période à surveiller (jours)</label>
           <select
             value={jours}
             onChange={(e) => setJours(Number(e.target.value))}
@@ -416,8 +416,8 @@ function TabLots() {
         <>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <KpiCard label="Lots concernés" value={data.nb_lots.toString()} color="text-[#1a1e2a]" />
-            <KpiCard label="Valeur exposée" value={fmt(data.valeur_totale_exposee)} color="text-[#EF9F27]" />
-            <KpiCard label="Lots critiques (≤30j)" value={data.nb_lots_critiques.toString()} color="text-[#EF9F27]" />
+            <KpiCard label="Valeur à risque" value={fmt(data.valeur_totale_exposee)} color="text-[#EF9F27]" />
+            <KpiCard label="Lots urgents (< 30j)" value={data.nb_lots_critiques.toString()} color="text-[#EF9F27]" />
             <KpiCard label="Lots expirés" value={data.nb_lots_expires.toString()} color="text-[#E24B4A]" />
           </div>
 
@@ -567,7 +567,7 @@ function TabExport() {
 const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: "ventes",  label: "Ventes",          icon: FiTrendingUp },
   { id: "stock",   label: "État du stock",   icon: FiPackage },
-  { id: "lots",    label: "Lots expirant",   icon: FiClock },
+  { id: "lots",    label: "Péremptions",      icon: FiClock },
   { id: "export",  label: "Export CSV",      icon: FiDownload },
 ];
 
@@ -578,7 +578,7 @@ export default function RapportsPage() {
     <div className="space-y-5">
       <div>
         <h2 className="text-[#1a1e2a] font-bold text-[20px]">Rapports</h2>
-        <p className="text-[#737e94] text-[13px] mt-0.5">Analyses financières et statistiques de stock</p>
+        <p className="text-[#737e94] text-[13px] mt-0.5">Analyse de vos ventes et état de votre stock</p>
       </div>
 
       {/* Onglets */}

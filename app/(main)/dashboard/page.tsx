@@ -207,8 +207,8 @@ export default async function DashboardPage() {
     {
       Icon: FiClock, iconBg: "#fff3e0", iconColor: "#EF9F27",
       value: String(nbAlertesExpiration),
-      label: "Alertes Expir.",
-      trend: "Lots expirant dans 90j",
+      label: "Péremptions",
+      trend: "Lots périmant dans 90j",
       valueColor: "#EF9F27",
     },
     {

@@ -261,7 +261,7 @@ export default function POSInterface({ medicaments, pharmacieId, utilisateurId }
             type="text"
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-            placeholder="Rechercher un médicament par nom, DCI, code-barres…"
+            placeholder="Rechercher un médicament par nom, principe actif, code-barres…"
             className="w-full pl-10 pr-4 py-3 border border-[#e0e5ed] rounded-[10px] text-[14px] text-[#1a1e2a] bg-white focus:outline-none focus:border-[#0F6E56] focus:ring-2 focus:ring-[#0F6E56]/10 shadow-sm"
             autoFocus
           />

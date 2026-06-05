@@ -46,7 +46,7 @@ export default function MedicamentModal({ medicament, categories, fournisseurs, 
 
   function validate(): boolean {
     const e: Record<string, string> = {};
-    if (!form.denomination.trim()) e.denomination = "La dénomination est requise.";
+    if (!form.denomination.trim()) e.denomination = "Le nom du médicament est requis.";
     if (form.prixVente <= 0) e.prixVente = "Le prix de vente doit être supérieur à 0.";
     setFieldErrors(e);
     return Object.keys(e).length === 0;
@@ -96,7 +96,7 @@ export default function MedicamentModal({ medicament, categories, fournisseurs, 
             <p className="text-[11px] font-semibold text-[#737e94] uppercase tracking-wider mb-3">Identification</p>
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-2">
-                <label className="block text-[12px] font-medium text-[#1a1e2a] mb-1">Dénomination *</label>
+                <label className="block text-[12px] font-medium text-[#1a1e2a] mb-1">Nom du médicament *</label>
                 <input
                   type="text"
                   value={form.denomination}
@@ -109,7 +109,7 @@ export default function MedicamentModal({ medicament, categories, fournisseurs, 
                 )}
               </div>
               <div>
-                <label className="block text-[12px] font-medium text-[#1a1e2a] mb-1">DCI</label>
+                <label className="block text-[12px] font-medium text-[#1a1e2a] mb-1">Principe actif</label>
                 <input
                   type="text"
                   value={form.dci ?? ""}
@@ -129,7 +129,7 @@ export default function MedicamentModal({ medicament, categories, fournisseurs, 
                 />
               </div>
               <div>
-                <label className="block text-[12px] font-medium text-[#1a1e2a] mb-1">Forme</label>
+                <label className="block text-[12px] font-medium text-[#1a1e2a] mb-1">Présentation</label>
                 <input
                   type="text"
                   value={form.forme ?? ""}
@@ -139,7 +139,7 @@ export default function MedicamentModal({ medicament, categories, fournisseurs, 
                 />
               </div>
               <div>
-                <label className="block text-[12px] font-medium text-[#1a1e2a] mb-1">Dosage</label>
+                <label className="block text-[12px] font-medium text-[#1a1e2a] mb-1">Dose / Concentration</label>
                 <input
                   type="text"
                   value={form.dosage ?? ""}
@@ -149,7 +149,7 @@ export default function MedicamentModal({ medicament, categories, fournisseurs, 
                 />
               </div>
               <div>
-                <label className="block text-[12px] font-medium text-[#1a1e2a] mb-1">Conditionnement</label>
+                <label className="block text-[12px] font-medium text-[#1a1e2a] mb-1">Emballage</label>
                 <input
                   type="text"
                   value={form.conditionnement ?? ""}

@@ -122,7 +122,7 @@ export default function StockTable({ medicaments, categories, fournisseurs, init
             type="text"
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-            placeholder="Rechercher par nom, DCI, code-barres…"
+            placeholder="Rechercher par nom, principe actif, code-barres…"
             className="w-full pl-9 pr-3 py-2 border border-[#e0e5ed] rounded-[8px] text-[13px] text-[#1a1e2a] focus:outline-none focus:border-[#0F6E56] bg-[#f6f7fa]"
           />
         </div>
@@ -177,7 +177,7 @@ export default function StockTable({ medicaments, categories, fournisseurs, init
             <table className="w-full">
               <thead>
                 <tr className="border-b border-[#e0e5ed] bg-[#f6f7fa]">
-                  {["Médicament", "Catégorie", "Forme / Dosage", "Prix vente", "Stock actuel", "Stock min", "Statut", ""].map((h) => (
+                  {["Médicament", "Catégorie", "Présentation / Dose", "Prix vente", "Stock actuel", "Stock min", "Statut", ""].map((h) => (
                     <th key={h} className="px-4 py-3 text-left text-[11px] font-semibold text-[#737e94] uppercase tracking-wider whitespace-nowrap">
                       {h}
                     </th>

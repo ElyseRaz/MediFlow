@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import ConfirmModal from "@/app/_components/ConfirmModal";
 import {
   FiHome,
   FiPackage,
@@ -48,6 +49,8 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<UserInfo | null>(null);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     fetch("/api/utilisateurs/me")
@@ -57,6 +60,7 @@ export default function Sidebar() {
   }, []);
 
   async function handleLogout() {
+    setIsLoggingOut(true);
     await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
     router.push("/");
   }
@@ -71,6 +75,7 @@ export default function Sidebar() {
   const roleLabel = user?.role === "admin" ? "Administrateur" : user?.role === "caissier" ? "Caissier" : "—";
 
   return (
+    <>
     <aside className="fixed left-0 top-0 w-[240px] h-screen bg-[#0B2B23] flex flex-col z-40">
       {/* Logo */}
       <div className="flex items-center gap-3 px-5 py-5">
@@ -118,7 +123,7 @@ export default function Sidebar() {
         </div>
         <button
           type="button"
-          onClick={handleLogout}
+          onClick={() => setShowLogoutConfirm(true)}
           title="Se déconnecter"
           className="text-[#7BBBA6] hover:text-white transition-colors shrink-0"
         >
@@ -126,5 +131,18 @@ export default function Sidebar() {
         </button>
       </div>
     </aside>
+
+    {showLogoutConfirm && (
+      <ConfirmModal
+        title="Se déconnecter ?"
+        message="Vous allez être redirigé vers la page de connexion."
+        confirmLabel="Se déconnecter"
+        danger={false}
+        isPending={isLoggingOut}
+        onConfirm={handleLogout}
+        onCancel={() => setShowLogoutConfirm(false)}
+      />
+    )}
+    </>
   );
 }
