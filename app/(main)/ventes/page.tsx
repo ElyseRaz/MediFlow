@@ -11,9 +11,6 @@ export default async function VentesPage() {
   if (!user) redirect("/");
 
   let medicaments: Awaited<ReturnType<typeof prisma.medicament.findMany<{ include: { categorie: true } }>>> = [];
-  let pharmacieId = user.pharmacieId;
-  let utilisateurId = user.userId;
-
   try {
     medicaments = serialize(await prisma.medicament.findMany({
       where: { statut: "actif" },
@@ -26,15 +23,7 @@ export default async function VentesPage() {
 
   return (
     <div className="space-y-4">
-      <div>
-        <h2 className="text-[#1a1e2a] font-bold text-[20px]">Point de vente</h2>
-        <p className="text-[#737e94] text-[13px] mt-0.5">Enregistrement des ventes et encaissement</p>
-      </div>
-      <POSInterface
-        medicaments={medicaments}
-        pharmacieId={pharmacieId}
-        utilisateurId={utilisateurId}
-      />
+      <POSInterface medicaments={medicaments} />
     </div>
   );
 }

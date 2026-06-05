@@ -22,12 +22,17 @@ export default function ConfirmModal({
   onCancel,
 }: Props) {
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confirm-modal-title"
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+    >
       <div className="bg-white rounded-[16px] shadow-2xl w-full max-w-[400px] p-6">
         <div className={`w-12 h-12 rounded-[12px] flex items-center justify-center mb-4 ${danger ? "bg-red-50" : "bg-amber-50"}`}>
-          <FiAlertTriangle size={22} className={danger ? "text-[#E24B4A]" : "text-[#EF9F27]"} />
+          <FiAlertTriangle size={22} className={danger ? "text-[#E24B4A]" : "text-[#EF9F27]"} aria-hidden="true" />
         </div>
-        <h3 className="text-[#1a1e2a] font-bold text-[16px] mb-2">{title}</h3>
+        <h3 id="confirm-modal-title" className="text-[#1a1e2a] font-bold text-[16px] mb-2">{title}</h3>
         <div className="text-[#737e94] text-[13px] mb-6">{message}</div>
         <div className="flex gap-3">
           <button

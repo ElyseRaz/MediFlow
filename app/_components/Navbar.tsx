@@ -4,15 +4,15 @@ import { usePathname, useRouter } from "next/navigation";
 import { FiBell, FiSearch, FiAlertTriangle, FiX, FiTruck, FiPackage } from "react-icons/fi";
 import { useEffect, useRef, useState } from "react";
 
-const pageTitles: Record<string, string> = {
-  "/dashboard":    "Tableau de Bord",
-  "/stock":        "Gestion de Stock",
-  "/ventes":       "Points de Vente",
-  "/historique":   "Historique Ventes",
-  "/reappro":      "Réapprovisionnement",
-  "/fournisseurs": "Fournisseurs",
-  "/rapports":     "Rapports",
-  "/parametres":   "Paramètres",
+const pageTitles: Record<string, { title: string; description: string }> = {
+  "/dashboard":    { title: "Tableau de bord",       description: "Vue d'ensemble de votre activité" },
+  "/stock":        { title: "Stock de médicaments",  description: "Gérez l'inventaire et les niveaux de stock" },
+  "/ventes":       { title: "Point de vente",         description: "Enregistrement des ventes et encaissement" },
+  "/historique":   { title: "Historique des ventes", description: "Toutes les transactions enregistrées" },
+  "/reappro":      { title: "Réapprovisionnement",   description: "Commandes fournisseurs et réceptions" },
+  "/fournisseurs": { title: "Fournisseurs",           description: "Gestion des partenaires et fournisseurs" },
+  "/rapports":     { title: "Rapports",               description: "Analyse de vos ventes et état de votre stock" },
+  "/parametres":   { title: "Paramètres",             description: "Profil, pharmacie et gestion des utilisateurs" },
 };
 
 type Alert = {
@@ -55,7 +55,7 @@ const ALERT_CONFIG: Record<Alert["type_alerte"], { label: string; color: string;
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const title = pageTitles[pathname] ?? "MediFlow";
+  const page = pageTitles[pathname] ?? { title: "MediFlow", description: "" };
 
   const [user, setUser] = useState<UserInfo | null>(null);
   const [alerts, setAlerts] = useState<Alert[]>([]);
@@ -168,7 +168,12 @@ export default function Navbar() {
 
   return (
     <header className="h-[60px] bg-white border-b border-[#e0e5ed] flex items-center px-5 gap-4 sticky top-0 z-30">
-      <h1 className="text-[#1a1e2a] font-semibold text-[18px] flex-1 truncate">{title}</h1>
+      <div className="flex-1 min-w-0">
+        <h1 className="text-[#1a1e2a] font-semibold text-[16px] leading-tight truncate">{page.title}</h1>
+        {page.description && (
+          <p className="text-[#737e94] text-[11px] leading-tight truncate">{page.description}</p>
+        )}
+      </div>
 
       {/* ── Recherche ── */}
       <div ref={searchRef} className="relative">

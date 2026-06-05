@@ -28,10 +28,6 @@ export default async function StockPage({ searchParams }: { searchParams: Promis
 
   return (
     <div className="space-y-5">
-      <div>
-        <h2 className="text-[#1a1e2a] font-bold text-[20px]">Stock de médicaments</h2>
-        <p className="text-[#737e94] text-[13px] mt-0.5">Gérez l&apos;inventaire et les niveaux de stock</p>
-      </div>
       <StockTable
         medicaments={medicaments}
         categories={categories}

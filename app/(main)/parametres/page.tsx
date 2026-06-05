@@ -639,11 +639,6 @@ export default function ParametresPage() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h2 className="text-[#1a1e2a] font-bold text-[20px]">Paramètres</h2>
-        <p className="text-[#737e94] text-[13px] mt-0.5">Profil, pharmacie et gestion des utilisateurs</p>
-      </div>
-
       {err && <InlineError msg={err} />}
 
       {me && (

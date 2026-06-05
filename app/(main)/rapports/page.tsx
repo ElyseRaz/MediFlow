@@ -576,10 +576,6 @@ export default function RapportsPage() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h2 className="text-[#1a1e2a] font-bold text-[20px]">Rapports</h2>
-        <p className="text-[#737e94] text-[13px] mt-0.5">Analyse de vos ventes et état de votre stock</p>
-      </div>
 
       {/* Onglets */}
       <div className="flex gap-1 bg-white rounded-[12px] border border-[#e0e5ed] p-1 w-fit shadow-[0px_2px_8px_0px_rgba(15,26,61,0.05)]">

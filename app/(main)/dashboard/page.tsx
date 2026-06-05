@@ -146,7 +146,10 @@ export default async function DashboardPage() {
     const ca = salesMap.get(i + 1) ?? 0;
     return {
       month: letter,
-      height: ca > 0 ? Math.max(Math.round((ca / maxCa) * 150), 8) : 8,
+      ca,
+      label: ca > 0 ? ca.toLocaleString("fr-FR") : "",
+      tooltip: ca > 0 ? `${ca.toLocaleString("fr-FR")} Ar` : "Aucune vente",
+      height: ca > 0 ? Math.max(Math.round((ca / maxCa) * 120), 8) : 4,
       current: i + 1 === moisActuel,
     };
   });
@@ -273,14 +276,27 @@ export default async function DashboardPage() {
             <h3 className="text-[#1a1e2a] font-semibold text-[13px]">Ventes Mensuelles</h3>
             <span className="text-[#737e94] text-[10px]">{anneeActuelle}</span>
           </div>
-          <div className="flex items-end gap-2 h-[160px]">
+          <div className="flex items-end gap-1.5 h-[160px]">
             {monthlySales.map((bar, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center gap-1">
+              <div key={i} className="flex-1 flex flex-col items-center gap-0.5 group relative">
+                {/* Tooltip au survol */}
+                <div className="absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col items-center z-10 pointer-events-none">
+                  <div className="bg-[#1a1e2a] text-white text-[9px] font-medium rounded-[4px] px-1.5 py-1 whitespace-nowrap">
+                    {bar.tooltip}
+                  </div>
+                  <div className="w-1.5 h-1.5 bg-[#1a1e2a] rotate-45 -mt-[3px]" />
+                </div>
+                {/* Label abrégé au-dessus de la barre */}
+                <span className={`text-[8px] font-semibold leading-none mb-0.5 ${bar.current ? "text-[#0F6E56]" : "text-[#737e94]"}`}>
+                  {bar.label}
+                </span>
                 <div
-                  className="w-full rounded-t-[5px] transition-all"
-                  style={{ height: `${bar.height}px`, backgroundColor: bar.current ? "#0F6E56" : "#a8d8c6" }}
+                  className="w-full rounded-t-[4px] transition-all cursor-default"
+                  style={{ height: `${bar.height}px`, backgroundColor: bar.current ? "#0F6E56" : bar.ca > 0 ? "#a8d8c6" : "#e0e5ed" }}
                 />
-                <span className="text-[9px] text-[#737e94]">{bar.month}</span>
+                <span className={`text-[8px] font-medium mt-0.5 ${bar.current ? "text-[#0F6E56]" : "text-[#737e94]"}`}>
+                  {bar.month}
+                </span>
               </div>
             ))}
           </div>
@@ -294,14 +310,8 @@ export default async function DashboardPage() {
           <div className="flex items-center gap-6">
             <div className="w-[130px] h-[130px] shrink-0 rounded-full bg-[#e6f5f0] flex items-center justify-center">
               <div className="w-[86px] h-[86px] rounded-full bg-white flex flex-col items-center justify-center">
-                <span className="text-[#0F6E56] font-bold text-[13px] leading-tight">
-                  {totalRevenu >= 1000000
-                    ? `${(totalRevenu / 1000000).toFixed(1)}M`
-                    : totalRevenu >= 1000
-                    ? `${Math.round(totalRevenu / 1000)}k`
-                    : totalRevenu > 0
-                    ? String(Math.round(totalRevenu))
-                    : "0"}
+                <span className="text-[#0F6E56] font-bold text-[10px] leading-tight text-center px-1">
+                  {Math.round(totalRevenu).toLocaleString("fr-FR")}
                 </span>
                 <span className="text-[#737e94] text-[9px]">Ariary</span>
               </div>

@@ -41,8 +41,6 @@ type ReceiptData = {
 
 type Props = {
   medicaments: MedWithCat[];
-  pharmacieId: string;
-  utilisateurId: string;
 };
 
 const MODES_PAIEMENT = [
@@ -63,7 +61,7 @@ function ar(n: number) {
   return `${Math.round(n).toLocaleString("fr-FR")} Ar`;
 }
 
-export default function POSInterface({ medicaments, pharmacieId, utilisateurId }: Props) {
+export default function POSInterface({ medicaments }: Props) {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -151,7 +149,7 @@ export default function POSInterface({ medicaments, pharmacieId, utilisateurId }
         prixUnitaire: item.prixUnitaire,
         tauxRemise: item.tauxRemise,
       }));
-      const result = await createVente({ pharmacieId, utilisateurId, modePaiement, montantPaye: paye, lignes });
+      const result = await createVente({ modePaiement, montantPaye: paye, lignes });
       setReceipt({
         ...result,
         montantPaye: paye,
@@ -407,10 +405,11 @@ export default function POSInterface({ medicaments, pharmacieId, utilisateurId }
           </div>
 
           <div>
-            <label className="block text-[11px] font-semibold text-[#737e94] uppercase tracking-wider mb-1.5">
+            <label htmlFor="montant-recu" className="block text-[11px] font-semibold text-[#737e94] uppercase tracking-wider mb-1.5">
               Montant reçu (Ar)
             </label>
             <input
+              id="montant-recu"
               type="number"
               min={totals.total}
               step="100"

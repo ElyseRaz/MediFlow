@@ -10,7 +10,19 @@
       "Bash(node -e \"require\\('dotenv'\\).config\\(\\); const {Pool}=require\\('pg'\\); const p=new Pool\\({connectionString:process.env.DATABASE_URL}\\); p.query\\(\\\\\"SELECT unnest\\(enum_range\\(NULL::mode_paiement\\)\\)::text AS val\\\\\"\\).then\\(r=>{console.log\\(r.rows.map\\(x=>x.val\\)\\);p.end\\(\\)}\\)\")",
       "Bash(node -e \"const p = require\\('./package.json'\\); console.log\\('next:', p.dependencies.next\\)\")",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Elyse\\\\Desktop\\\\gestion_medicaments\" -Recurse -Name)",
+      "Bash(Select-Object -First 50)",
+      "PowerShell(Get-ChildItem -Path \"c:\\\\Users\\\\Elyse\\\\Desktop\\\\gestion_medicaments\" -Recurse | Where-Object { $_.Extension -match '\\\\.\\(ts|tsx|js\\)$' } | Select-Object -ExpandProperty FullName | Head -100)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Elyse\\\\Desktop\\\\gestion_medicaments\" -Recurse -Filter \"*.tsx\")",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Sort-Object)",
+      "Read(//c/Users/Elyse/Desktop/gestion_medicamentos/app/api/rapports/ventes/**)",
+      "Read(//c/Users/Elyse/Desktop/gestion_medicamentos/app/api/ventes/stats/jour/**)",
+      "Read(//c/Users/Elyse/Desktop/gestion_medicamentos/app/api/commandes/suggestions/**)",
+      "Read(//c/Users/Elyse/Desktop/gestion_medicamentos/app/api/alertes/tout-lire/**)",
+      "Read(//c/Users/Elyse/Desktop/gestion_medicamentos/app/api/alertes/[id]/lue/**)",
+      "Read(//c/Users/Elyse/Desktop/gestion_medicamentos/lib/**)"
     ]
   }
 }

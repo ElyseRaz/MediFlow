@@ -231,16 +231,18 @@ export default function StockTable({ medicaments, categories, fournisseurs, init
                             onClick={() => setEditTarget(med)}
                             className="p-1.5 rounded-[6px] hover:bg-[#e6f5f0] text-[#0F6E56] transition-colors"
                             title="Modifier"
+                            aria-label={`Modifier ${med.denomination}`}
                           >
-                            <FiEdit2 size={14} />
+                            <FiEdit2 size={14} aria-hidden="true" />
                           </button>
                           <button
                             type="button"
                             onClick={() => setDeleteTarget(med)}
                             className="p-1.5 rounded-[6px] hover:bg-red-50 text-[#E24B4A] transition-colors"
                             title="Supprimer"
+                            aria-label={`Supprimer ${med.denomination}`}
                           >
-                            <FiTrash2 size={14} />
+                            <FiTrash2 size={14} aria-hidden="true" />
                           </button>
                         </div>
                       </td>

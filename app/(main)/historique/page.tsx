@@ -36,10 +36,6 @@ export default async function HistoriquePage() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h2 className="text-[#1a1e2a] font-bold text-[20px]">Historique des ventes</h2>
-        <p className="text-[#737e94] text-[13px] mt-0.5">Toutes les transactions enregistrées</p>
-      </div>
       <HistoriqueTable ventes={ventes} isAdmin={isAdmin} />
     </div>
   );

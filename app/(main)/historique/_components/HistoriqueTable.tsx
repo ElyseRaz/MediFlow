@@ -208,11 +208,16 @@ export default function HistoriqueTable({ ventes, isAdmin = false }: Props) {
 
       {/* Detail modal */}
       {selected && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="detail-vente-title"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+        >
           <div className="bg-white rounded-[16px] shadow-2xl w-full max-w-[500px] max-h-[85vh] flex flex-col">
             <div className="flex items-center justify-between px-6 py-4 border-b border-line">
               <div>
-                <h3 className="font-bold text-[16px] text-ink">{selected.numeroVente}</h3>
+                <h3 id="detail-vente-title" className="font-bold text-[16px] text-ink">{selected.numeroVente}</h3>
                 <p className="text-[12px] text-subtle mt-0.5">
                   {new Date(selected.createdAt).toLocaleString("fr-FR")} · {selected.utilisateur.prenom} {selected.utilisateur.nom}
                 </p>

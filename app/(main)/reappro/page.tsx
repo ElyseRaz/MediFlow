@@ -37,21 +37,12 @@ export default async function ReapproPage() {
     // Base de données non configurée
   }
 
-  const pharmacieId = user.pharmacieId;
-  const utilisateurId = user.userId;
-
   return (
     <div className="space-y-5">
-      <div>
-        <h2 className="text-ink font-bold text-[20px]">Réapprovisionnement</h2>
-        <p className="text-subtle text-[13px] mt-0.5">Commandes fournisseurs et réceptions</p>
-      </div>
       <ReapproClient
         commandes={commandes}
         fournisseurs={fournisseurs}
         medicaments={medicaments}
-        pharmacieId={pharmacieId}
-        utilisateurId={utilisateurId}
       />
     </div>
   );

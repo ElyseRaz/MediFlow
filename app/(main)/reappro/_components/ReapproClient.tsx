@@ -23,8 +23,6 @@ type Props = {
   commandes: CommandeWithRelations[];
   fournisseurs: Fournisseur[];
   medicaments: Medicament[];
-  pharmacieId: string;
-  utilisateurId: string;
 };
 
 const STATUT_CONFIG = {
@@ -40,11 +38,9 @@ type CartLigne = { medicament: Medicament; quantite: number; prixUnitaire: numbe
 function NouvelleCommandeModal({
   fournisseurs,
   medicaments,
-  pharmacieId,
-  utilisateurId,
   onClose,
   onSuccess,
-}: Pick<Props, "fournisseurs" | "medicaments" | "pharmacieId" | "utilisateurId"> & {
+}: Pick<Props, "fournisseurs" | "medicaments"> & {
   onClose: () => void;
   onSuccess?: () => void;
 }) {
@@ -115,7 +111,7 @@ function NouvelleCommandeModal({
           quantiteCommandee: l.quantite,
           prixUnitaire: l.prixUnitaire,
         }));
-        await createCommande({ pharmacieId, fournisseurId, utilisateurId, dateLivraisonPrevue: dateLivraison || undefined, notes, lignes: data });
+        await createCommande({ fournisseurId, dateLivraisonPrevue: dateLivraison || undefined, notes, lignes: data });
         onSuccess?.();
       } catch {
         setServerError("Une erreur est survenue. Veuillez réessayer.");
@@ -289,7 +285,7 @@ function NouvelleCommandeModal({
   );
 }
 
-export default function ReapproClient({ commandes, fournisseurs, medicaments, pharmacieId, utilisateurId }: Props) {
+export default function ReapproClient({ commandes, fournisseurs, medicaments }: Props) {
   const toast = useToast();
   const [showModal, setShowModal] = useState(false);
   const [selected, setSelected] = useState<CommandeWithRelations | null>(null);
@@ -549,8 +545,6 @@ export default function ReapproClient({ commandes, fournisseurs, medicaments, ph
         <NouvelleCommandeModal
           fournisseurs={fournisseurs}
           medicaments={medicaments}
-          pharmacieId={pharmacieId}
-          utilisateurId={utilisateurId}
           onClose={() => setShowModal(false)}
           onSuccess={() => {
             setShowModal(false);

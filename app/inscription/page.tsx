@@ -180,10 +180,6 @@ export default function InscriptionPage() {
               </div>
             ))}
           </div>
-
-          <p className="mt-auto text-[#8bbfb3] text-[12px]">
-            Approuvé par +200 pharmacies à Madagascar
-          </p>
         </div>
       </div>
 

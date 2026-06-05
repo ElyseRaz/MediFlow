@@ -15,10 +15,6 @@ export default async function FournisseursPage({ searchParams }: { searchParams:
 
   return (
     <div className="space-y-5">
-      <div>
-        <h2 className="text-ink font-bold text-[20px]">Fournisseurs</h2>
-        <p className="text-subtle text-[13px] mt-0.5">Gestion des partenaires et fournisseurs</p>
-      </div>
       <FournisseursClient fournisseurs={fournisseurs} initialSearch={q} />
     </div>
   );
